@@ -2,9 +2,6 @@
     "name": "jesusfar/scatchbling",
     "description": "A simple PoC of DDD for scatchbling API",
     "type": "project",
-    "require-dev": {
-        "phpunit/phpunit": "^7.0"
-    },
     "license": "MIT",
     "authors": [
         {
@@ -13,5 +10,23 @@
         }
     ],
     "minimum-stability": "dev",
-    "require": {}
+    "autoload": {
+        "psr-4": {
+            "Scatchbling\\": "src/Scatchbling/"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Scatchbling\\": "tests/Scatchbling/"
+        }
+    },
+    "require": {},
+    "config": {
+        "platform": {
+            "php": "7.0.15"
+        }
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^5.7"
+    }
 }

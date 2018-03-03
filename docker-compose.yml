@@ -1,0 +1,24 @@
+version: '2'
+
+services:
+    scatchbling:
+        image: nidarbox/php:7.0-cli
+        container_name: scatchbling
+        volumes:
+            - ./:/app
+        depends_on:
+            - mysql
+        ports:
+            - 18080:8080
+        links:
+            - mysql
+        command: tail -f /dev/null
+    mysql:
+        image: nidarbox/mysql:5.7
+        container_name: mysql-scatchbling
+        volumes:
+            - mysql-data:/var/lib/mysql
+        environment:
+            MYSQL_ROOT_PASSWORD: "toor"
+volumes:
+    mysql-data:
