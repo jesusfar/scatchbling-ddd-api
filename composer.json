@@ -1,0 +1,17 @@
+{
+    "name": "jesusfar/scatchbling",
+    "description": "A simple PoC of DDD for scatchbling API",
+    "type": "project",
+    "require-dev": {
+        "phpunit/phpunit": "^7.0"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Jesus Farfan",
+            "email": "jesu.farfan23@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {}
+}
