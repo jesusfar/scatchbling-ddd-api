@@ -1,10 +1,10 @@
 <?php
 
-namespace Scatchbling\Domain\Model;
+namespace Scatchbling\Item\Domain\Model;
 
 /**
  * Class ItemTest
- * @package Scatchbling\Domain\Model
+ * @package Scatchbling\Item\Domain\Model
  */
 class ItemTest extends \PHPUnit_Framework_TestCase
 {
@@ -18,10 +18,10 @@ class ItemTest extends \PHPUnit_Framework_TestCase
      * @param $description
      * @param $size
      * @param $price
-     * @throws \Scatchbling\Domain\Exception\DomainException
+     * @throws \Scatchbling\Item\Domain\Exception\DomainException
      */
     public function constructNewItem($name, $description, $size, $price) {
-        $item = new Item($name, $description, $size, $price);
+        $item = new Item(new ItemId(), $name, $description, $size, $price);
 
         $this->assertNotNull($item);
         $this->assertNotNull($item->getId());
@@ -65,15 +65,15 @@ class ItemTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @dataProvider invalidDataItemProvider
-     * @expectedException \Scatchbling\Domain\Exception\DomainException
+     * @expectedException \Scatchbling\Item\Domain\Exception\DomainException
      * @param $name
      * @param $description
      * @param $size
      * @param $price
-     * @throws \Scatchbling\Domain\Exception\DomainException
+     * @throws \Scatchbling\Item\Domain\Exception\DomainException
      */
     public function constructNewItemThrowsDomainException($name, $description, $size, $price) {
-        $item = new Item($name, $description, $size, $price);
+        $item = new Item(new ItemId(), $name, $description, $size, $price);
     }
 
     /**

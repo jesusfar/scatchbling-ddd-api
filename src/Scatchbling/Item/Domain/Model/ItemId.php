@@ -1,12 +1,12 @@
 <?php
 
-namespace Scatchbling\Domain\Model;
+namespace Scatchbling\Item\Domain\Model;
 
 use Ramsey\Uuid\Uuid;
 
 /**
  * Class ItemId
- * @package Scatchbling\Domain\Model
+ * @package Scatchbling\Item\Domain\Model
  */
 class ItemId
 {

@@ -1,11 +1,11 @@
 <?php
 
-namespace Scatchbling\Domain\Exception;
+namespace Scatchbling\Item\Domain\Exception;
 
 
 class DomainException extends \Exception
 {
-    const DOMAIN_EXCEPTION_CODE = 100;
+    const DOMAIN_EXCEPTION_CODE = 400;
 
     /**
      * DomainException constructor.

@@ -1,12 +1,12 @@
 <?php
 
-namespace Scatchbling\Domain\Model;
+namespace Scatchbling\Item\Domain\Model;
 
-use Scatchbling\Domain\Exception\DomainException;
+use Scatchbling\Item\Domain\Exception\DomainException;
 
 /**
  * Class Item
- * @package Scatchbling\Domain\Model
+ * @package Scatchbling\Item\Domain\Model
  */
 class Item
 {
@@ -69,15 +69,16 @@ class Item
 
     /**
      * Item constructor.
+     * @param ItemId $itemId
      * @param string $name
      * @param string $description
      * @param string $size
      * @param float $price
      * @throws DomainException
      */
-    public function __construct(string $name, string $description, string $size, float $price)
+    public function __construct(ItemId $itemId, string $name, string $description, string $size, float $price)
     {
-        $this->id = new ItemId();
+        $this->id = $itemId;
         $this->setName($name);
         $this->setDescription($description);
         $this->setSize($size);
