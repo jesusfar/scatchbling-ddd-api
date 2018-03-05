@@ -14,7 +14,7 @@ $app->withConfig(__DIR__ . '/../config/config.json');
 $app->bootstrap();
 
 // Routes
-$app->get('/items', function (Request $request) use ($app) {
+$app->get('/v1/items', function (Request $request) use ($app) {
     $container = $app->getContainer();
 
     $result = $container['itemService']->getItems($request->getParam('limit', '10'), $request->getParam('offset', 0));
@@ -22,7 +22,7 @@ $app->get('/items', function (Request $request) use ($app) {
     return (new Response())->withJson($result);
 });
 
-$app->get('/items/{itemId}', function (Request $request, $uriParams) use ($app) {
+$app->get('/v1/items/{itemId}', function (Request $request, $uriParams) use ($app) {
     $container = $app->getContainer();
 
     $result = $container['itemService']->getItem($uriParams[0]);
@@ -30,7 +30,7 @@ $app->get('/items/{itemId}', function (Request $request, $uriParams) use ($app) 
     return (new Response())->withJson($result);
 });
 
-$app->post('/items', function (Request $request) use ($app) {
+$app->post('/v1/items', function (Request $request) use ($app) {
     $container = $app->getContainer();
 
     $createItemRequest = new CreateItemRequest();
@@ -44,7 +44,7 @@ $app->post('/items', function (Request $request) use ($app) {
     return (new Response(HttpStatusCode::CREATED))->withJson($result);
 });
 
-$app->put('/items/{itemId}', function (Request $request, $uriParams) use ($app) {
+$app->put('/v1/items/{itemId}', function (Request $request, $uriParams) use ($app) {
     $container = $app->getContainer();
 
     $updateItemRequest = new UpdateItemRequest();
@@ -59,7 +59,7 @@ $app->put('/items/{itemId}', function (Request $request, $uriParams) use ($app) 
     return (new Response(HttpStatusCode::OK))->withJson($result);
 });
 
-$app->delete('/items/{itemId}', function (Request $request, $uriParams) use ($app) {
+$app->delete('/v1/items/{itemId}', function (Request $request, $uriParams) use ($app) {
     $container = $app->getContainer();
 
     $container['itemService']->deleteItem($uriParams[0]);

@@ -1,0 +1,145 @@
+#%RAML 1.0
+---
+title: Scratcher API DEMO
+baseUri: http://localhost:8080/{version}
+version: v1
+
+/items:
+  description: |
+    Items resource
+  get:
+    queryParameters:
+      limit:
+        description: "limit records"
+      offset:
+        description: "offset records"
+    responses:
+      200:
+        body:
+          application/json:
+            example: |
+              [
+                  {
+                      "item_id": "26be44f2-bdc1-4878-b834-4bce3720e977",
+                      "item_name": "The Itcher",
+                      "item_description": "Scratch any itch",
+                      "item_size": "XL",
+                      "item_price": 27.86
+                  },
+                  {
+                      "item_id": "5cdfde5f-c594-4403-98b1-5c6d46bbf24c",
+                      "item_name": "The Itcher",
+                      "item_description": "Scratch any itch",
+                      "item_size": "XL",
+                      "item_price": 27.86
+                  }
+              ]
+  post:
+    description: |
+      Creates a new scratcher item
+    body:
+      application/json:
+        example: |
+          {
+          	"name": "The Itcher",
+              "description": "Scratch any itch",
+              "size": "XL",
+              "price": 27.86
+          }
+    responses:
+      201:
+        body:
+          application/json:
+            example: |
+              {
+                  "item_id": "6c771aa0-185b-4b98-9553-fea6ca9fe2e5",
+                  "item_name": "The Itcher",
+                  "item_description": "Scratch any itch",
+                  "item_size": "XL",
+                  "item_price": 27.86
+              }
+      400:
+        body:
+          application/json:
+            example: |
+              {
+                  "code": 400,
+                  "message": "Name param is empty."
+              }
+  /{itemId}:
+    get:
+      description: |
+        Get a item by ide
+      responses:
+        200:
+          body:
+           application/json:
+             example: |
+               {
+                   "item_id": "6c771aa0-185b-4b98-9553-fea6ca9fe2e5",
+                   "item_name": "The Itcher",
+                   "item_description": "Scratch any itch",
+                   "item_size": "XL",
+                   "item_price": 27.86
+               }
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                    "code": 404,
+                    "message": "Scratcher does not exist."
+                }
+    put:
+      description: |
+        Update an item
+      body:
+        application/json:
+          example: |
+            {
+                "name": "The Itcher",
+                "description": "Scratch any itch",
+                "size": "XL",
+                "price": 27.86
+            }
+      responses:
+        201:
+          body:
+            application/json:
+              example: |
+                {
+                    "item_id": "6c771aa0-185b-4b98-9553-fea6ca9fe2e5",
+                    "item_name": "The Itcher",
+                    "item_description": "Scratch any itch",
+                    "item_size": "XL",
+                    "item_price": 27.86
+                }
+        400:
+          body:
+            application/json:
+              example: |
+                {
+                    "code": 400,
+                    "message": "Name param is empty."
+                }
+        404:
+          body:
+            application/json:
+              example: |
+                {
+                    "code": 404,
+                    "message": "Scratcher does not exist."
+                }
+    delete:
+      description: |
+        Deletes an item
+      responses:
+        204:
+        404:
+         body:
+           application/json:
+             example: |
+               {
+                  "code": 404,
+                  "message": "Scratcher does not exist."
+               }
