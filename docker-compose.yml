@@ -2,20 +2,22 @@ version: '2'
 
 services:
     scatchbling:
-        image: nidarbox/php:7.0-cli
+        image: nidarbox/php:7.0-fpm-nginx
         container_name: scatchbling
         volumes:
             - ./:/app
         depends_on:
             - mysql
         ports:
-            - 18080:8080
+            - 18080:80
         links:
             - mysql
         command: tail -f /dev/null
     mysql:
         image: nidarbox/mysql:5.7
         container_name: mysql-scatchbling
+        ports:
+          - 3306:3306
         volumes:
             - mysql-data:/var/lib/mysql
         environment:

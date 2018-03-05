@@ -164,6 +164,7 @@ class Item
 
         $sizes = explode(",", $size);
         foreach ($sizes as $value) {
+            $value = trim($value);
             if (!array_key_exists($value, self::SIZES_MAP)) {
                 throw new DomainException(sprintf("Size %s is not valid.", $value));
             }

@@ -12,19 +12,37 @@ abstract class PDORepository
     /**
      * @var
      */
-    private $connection;
+    private $connection = null;
+
+    private $config;
+
+    /**
+     * PDORepository constructor.
+     * @param array $config
+     */
+    public function __construct(array $config = [])
+    {
+        $this->config = $config;
+    }
+
 
     /**
      * @return mixed
      */
     private function getConnection() {
-        if (self::$connection == null) {
-            // TODO get config from env variables.
-            $db = "";
-            $host = "";
-            $user = "";
-            $password = "";
-            $this->connection = new \PDO("mysql:dbname$db;host=$host", $user, $password);
+        if ($this->connection == null) {
+            $db = $this->config['dbname'];
+            $host = $this->config['host'];
+            $user = $this->config['user'];
+            $password = $this->config['password'];
+
+            try{
+                $this->connection = new \PDO("mysql:host=$host;dbname=$db", $user, $password);
+                return $this->connection;
+            } catch (\PDOException $e) {
+                // TODO handle error connection
+                error_log('Error connection to databse: ' . $e->getMessage(), 3, '/tmp/scratcher.log');
+            }
         } else {
             return $this->connection;
         }
@@ -42,6 +60,7 @@ abstract class PDORepository
             if (! $stmt->execute($args)) {
                 // TODO throw repository exception
             }
+
             return $stmt;
         } catch (\PDOException $e) {
             // TODO throw repository exception
@@ -54,8 +73,7 @@ abstract class PDORepository
      * @return mixed
      */
     protected function execute(string $sql, $args) {
-        $this->exec($sql, $args);
-        return $stmt;
+        return $this->exec($sql, $args);
     }
 
     /**

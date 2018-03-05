@@ -10,9 +10,10 @@ interface ItemRepository
 {
     /**
      * @param Item $item
+     * @param bool $isUpdate
      * @return mixed
      */
-    public function save(Item $item);
+    public function save(Item $item, bool $isUpdate = false);
 
     /**
      * @param Item $item

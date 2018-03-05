@@ -43,7 +43,7 @@ class ItemService implements ItemServiceInterface
 
         $this->itemRepository->save($item);
 
-        return $item;
+        return $this->transformToResponse($item);
     }
 
     /**
@@ -53,7 +53,7 @@ class ItemService implements ItemServiceInterface
      */
     public function updateItem(UpdateItemRequest $request)
     {
-        $item = $this->itemRepository->findById($request->getItemId());
+        $item = $this->itemRepository->findById(new ItemId($request->getItemId()));
 
         if ($item == null) {
             throw new EntityNotFoundException("Scratcher does not exist.");
@@ -64,9 +64,9 @@ class ItemService implements ItemServiceInterface
         $item->setSize($request->getSize());
         $item->setPrice($request->getPrice());
 
-        $this->itemRepository->save($item);
+        $this->itemRepository->save($item, true);
 
-        return $item;
+        return $this->transformToResponse($item);
     }
 
     /**
@@ -76,13 +76,13 @@ class ItemService implements ItemServiceInterface
      */
     public function getItem(string $itemId)
     {
-        $item = $this->itemRepository->findById($itemId);
+        $item = $this->itemRepository->findById(new ItemId($itemId));
 
         if ($item == null) {
             throw new EntityNotFoundException("Scratcher does not exist.");
         }
 
-        return $item;
+        return $this->transformToResponse($item);
     }
 
     /**
@@ -90,15 +90,16 @@ class ItemService implements ItemServiceInterface
      * @param string $offset
      * @return mixed
      */
-    public function getItems(string $limit = "20", string $offset = "10")
+    public function getItems(string $limit = "20", string $offset = "0")
     {
-        return [
-            'items',
-        ];
 
         $itemCollection = $this->itemRepository->findAll($limit, $offset);
 
-        return $itemCollection;
+        $collectionResult = [];
+        foreach ($itemCollection as $item) {
+            $collectionResult[] = $this->transformToResponse($item);
+        }
+        return $collectionResult;
     }
 
     /**
@@ -108,12 +109,23 @@ class ItemService implements ItemServiceInterface
      */
     public function deleteItem(string $itemId)
     {
-        $item = $this->itemRepository->findById($request->getItemId());
+        $item = $this->itemRepository->findById(new ItemId($itemId));
 
         if ($item == null) {
             throw new EntityNotFoundException("Scratcher does not exist.");
         }
 
         $this->itemRepository->delete($item);
+    }
+
+    private function transformToResponse(Item $item)
+    {
+        return [
+            'item_id' => $item->getId()->getId(),
+            'item_name' => $item->getName(),
+            'item_description' => $item->getDescription(),
+            'item_size' => $item->getSize(),
+            'item_price' => $item->getPrice(),
+        ];
     }
 }

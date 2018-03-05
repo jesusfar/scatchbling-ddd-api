@@ -17,7 +17,6 @@ class Request
 
     /**
      * Request constructor.
-     * @throws HttpException
      */
     private function __construct()
     {
@@ -28,7 +27,6 @@ class Request
 
     /**
      * @return null|Request
-     * @throws HttpException
      */
     public static function fromEnvironment()
     {
@@ -100,14 +98,11 @@ class Request
 
     /**
      * @return $this
-     * @throws HttpException
      */
     private function loadMethod()
     {
         $this->method = $_SERVER['REQUEST_METHOD'] ?? null;
-        if ($this->method == null) {
-            throw new HttpException("REQUEST_METHOD ERROR");
-        }
+
         return $this;
     }
 

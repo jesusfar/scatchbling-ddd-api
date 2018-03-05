@@ -36,7 +36,7 @@ interface ItemServiceInterface
      * @param string $offset
      * @return mixed
      */
-    public function getItems(string $limit = "20", string $offset = "10");
+    public function getItems(string $limit = "20", string $offset = "0");
 
     /**
      * @param string $itemId

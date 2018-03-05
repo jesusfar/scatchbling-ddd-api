@@ -13,17 +13,36 @@ use Scatchbling\Scratcher\Domain\Model\ItemRepository;
  */
 class PDOItemRepository extends PDORepository implements ItemRepository
 {
+    /**
+     * PDOItemRepository constructor.
+     * @param array $config
+     */
+    public function __construct(array $config = [])
+    {
+        parent::__construct($config);
+    }
+
 
     /**
      * @param Item $item
+     * @param bool $isUpdate
      * @return mixed
      */
-    public function save(Item $item)
+    public function save(Item $item, bool $isUpdate = false)
     {
-        $sql = <<<EOQ
+        if ($isUpdate) {
+            $sql = <<<EOQ
+UPDATE items 
+SET item_name = :itemName, item_description = :itemDescription, item_size = :itemSize, item_cost = :itemCost
+WHERE item_id = :itemId
+EOQ;
+
+        } else {
+            $sql = <<<EOQ
 INSERT INTO items(item_id, item_name, item_description, item_size, item_cost) 
 VALUES (:itemId, :itemName, :itemDescription, :itemSize, :itemCost)
 EOQ;
+        }
 
         $args = [
             ':itemId' => $item->getId(),
@@ -43,40 +62,43 @@ EOQ;
     public function delete(Item $item)
     {
         $sql = <<<EOQ
-DELETE FROM items WHERE item_id == :itemId
+DELETE FROM items WHERE item_id = :itemId
 EOQ;
-        return $this->execute($sql, [':itemId' => $item->getId()]);
+        $this->execute($sql, [':itemId' => $item->getId()]);
     }
 
     /**
      * @param ItemId $itemId
      * @return mixed
+     * @throws \Scatchbling\Scratcher\Domain\Exception\DomainException
      */
     public function findById(ItemId $itemId)
     {
         $sql = <<<EOQ
-SELECT * FROM items WHERE item_id == :itemId
+SELECT * FROM items WHERE item_id = :itemId
 EOQ;
         $rows = $this->query($sql, [':itemId' => $itemId->getId()]);
 
-        return $this->buildItem($rows[0]);
+        if (count($rows) == 1) {
+            return $this->buildItem($rows[0]);
+        }
+
+        return null;
     }
 
     /**
      * @param int $limit
      * @param int $offset
      * @return mixed
+     * @throws \Scatchbling\Scratcher\Domain\Exception\DomainException
      */
-    public function findAll(int $limit = 20, int $offset = 10)
+    public function findAll(int $limit = 20, int $offset = 0)
     {
         $collection = [];
         $sql = <<<EOQ
-SELECT * FROM items LIMIT :limit OFFSET :offset
+SELECT * FROM items LIMIT $limit OFFSET $offset
 EOQ;
-        $rows = $this->query($sql, [
-            ':limit' => $limit,
-            ':offset' => $offset,
-        ]);
+        $rows = $this->query($sql, []);
 
         foreach ($rows as $row) {
             $collection[] = $this->buildItem($row);
@@ -86,12 +108,19 @@ EOQ;
     }
 
     /**
-     * @param array $item
+     * @param array $data
      * @return Item
      * @throws \Scatchbling\Scratcher\Domain\Exception\DomainException
      */
-    private function buildItem(array $item)
+    private function buildItem(array $data)
     {
-        return new Item();
+        $item = new Item(
+            new ItemId($data['item_id']),
+            $data['item_name'],
+            $data['item_description'],
+            $data['item_size'],
+            $data['item_cost']
+        );
+        return $item;
     }
 }

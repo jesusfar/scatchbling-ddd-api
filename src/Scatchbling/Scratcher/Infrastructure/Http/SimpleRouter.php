@@ -91,7 +91,7 @@ class SimpleRouter implements Router
 
         foreach ($this->routes as $routeKey => $route) {
             // Replace all curly {} braces for (\w+)
-            $routeReplaced = preg_replace('/{([A-Za-z]*?)}/', '(\w+)', $routeKey);
+            $routeReplaced = preg_replace('/{([A-Za-z]*?)}/', '([a-z0-9\-]*)', $routeKey);
             $pattern = '/' . str_replace('/', '\/', $routeReplaced) .'/';
 
             // if match

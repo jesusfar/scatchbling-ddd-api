@@ -14,6 +14,7 @@ use Scatchbling\Scratcher\Infrastructure\Persistence\pdo\PDOItemRepository;
 class Application extends SimpleRouter
 {
     private $container;
+    private $pathConfig;
 
     /**
      * Application constructor.
@@ -43,11 +44,11 @@ class Application extends SimpleRouter
      */
     public function bootstrap()
     {
+        $this->loadConfig();
         $this->initContainer();
     }
 
     /**
-     * @throws Http\HttpException
      */
     public function run()
     {
@@ -61,12 +62,26 @@ class Application extends SimpleRouter
      */
     private function initContainer()
     {
+        $config = $this->container['config'];
         // Repository
-        $itemRepository = new PDOItemRepository();
+        $itemRepository = new PDOItemRepository($config['database']);
         $this->container['itemRepository'] = $itemRepository;
 
         // Service Instance
         $this->container['itemService'] = new ItemService($itemRepository);
+    }
+
+    public function withConfig(string $pathConfig)
+    {
+        $this->pathConfig = $pathConfig;
+        return $this;
+    }
+
+    private function loadConfig()
+    {
+        if ($this->pathConfig != null) {
+            $this->container['config'] = json_decode(file_get_contents($this->pathConfig), TRUE);
+        }
     }
 
 
