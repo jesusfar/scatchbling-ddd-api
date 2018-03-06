@@ -17,17 +17,24 @@ class AuthorizationService implements AuthorizationServiceInterface
 {
 
     /**
+     * @var array
+     */
+    private $credentials = [];
+
+    /**
      * @var SessionRepository
      */
     private $sessionRepository;
 
     /**
      * AuthorizationService constructor.
-     * @param $sessionRepository
+     * @param SessionRepository $sessionRepository
+     * @param array $credentials
      */
-    public function __construct(SessionRepository $sessionRepository)
+    public function __construct(SessionRepository $sessionRepository, array $credentials)
     {
         $this->sessionRepository = $sessionRepository;
+        $this->credentials = $credentials;
     }
 
 
@@ -64,8 +71,9 @@ class AuthorizationService implements AuthorizationServiceInterface
      */
     public function login(LoginRequest $request)
     {
-        // TODO register user, for the moment we have a unique user.
-        if ($request->getUser() != 'satoshi' || $request->getPassword() != 's@t0sh1') {
+        $user = $this->credentials['user'];
+        $password = $this->credentials['password'];
+        if ($request->getUser() != $user || $request->getPassword() != $password) {
             throw new AuthorizationException("Invalid credentials.");
         }
 

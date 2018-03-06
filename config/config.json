@@ -7,5 +7,9 @@
     "user": "root",
     "password": "toor",
     "charset": "UTF8"
+  },
+  "apiCredentials": {
+    "user": "test",
+    "password": "test"
   }
 }

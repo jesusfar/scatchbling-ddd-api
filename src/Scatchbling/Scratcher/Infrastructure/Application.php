@@ -79,7 +79,7 @@ class Application extends SimpleRouter
 
         // Service Instance
         $this->container['itemService'] = new ItemService($itemRepository);
-        $this->container['authorizationService'] = new AuthorizationService($sessionRepository);
+        $this->container['authorizationService'] = new AuthorizationService($sessionRepository, $config['apiCredentials']);
     }
 
     public function withConfig(string $pathConfig)
