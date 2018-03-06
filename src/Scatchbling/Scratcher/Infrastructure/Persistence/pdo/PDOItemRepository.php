@@ -15,11 +15,11 @@ class PDOItemRepository extends PDORepository implements ItemRepository
 {
     /**
      * PDOItemRepository constructor.
-     * @param array $config
+     * @param $connection
      */
-    public function __construct(array $config = [])
+    public function __construct(PDOConnection $connection)
     {
-        parent::__construct($config);
+        parent::__construct($connection);
     }
 
 

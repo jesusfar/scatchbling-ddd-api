@@ -2,6 +2,7 @@
 
 namespace Scatchbling\Scratcher\Infrastructure\Http;
 
+use Scatchbling\Scratcher\Domain\Exception\AuthorizationException;
 use Scatchbling\Scratcher\Domain\Exception\DomainException;
 use Scatchbling\Scratcher\Domain\Exception\EntityNotFoundException;
 
@@ -17,6 +18,7 @@ class SimpleRouter implements Router
     const DELETE_METHOD = "DELETE";
 
     private $routes;
+    private $beforeCallbacks = [];
 
     /**
      * @param string $pattern
@@ -59,6 +61,15 @@ class SimpleRouter implements Router
     }
 
     /**
+     * @param $callback
+     * @return mixed
+     */
+    public function before($callback)
+    {
+        $this->addBeforeCallback($callback);
+    }
+
+    /**
      * Handle the request and return a response.
      * @param Request $request
      * @return void
@@ -66,6 +77,12 @@ class SimpleRouter implements Router
     public function handle(Request $request)
     {
         try {
+            // Execute before callbacks
+            foreach ($this->beforeCallbacks as $beforeCallback) {
+                $this->executeBeforeCallback($beforeCallback, $request);
+            }
+
+            // Execute methods
             $method = $request->getMethod();
             $routeMatch = $this->match($method, $request->getRequestTarget());
 
@@ -162,7 +179,12 @@ class SimpleRouter implements Router
                 'message' => $e->getMessage()
             ]);
         } elseif ($e instanceof HttpException) {
-            $response = (new Response())->withStatus(HttpStatusCode::NOT_FOUND);
+            $response = (new Response())->withStatus($e->getCode());
+        } elseif ($e instanceof AuthorizationException) {
+            $response = (new Response())->withStatus(HttpStatusCode::UNAUTHORIZED)->withJson([
+                'code' => $e->getCode(),
+                'message' => $e->getMessage(),
+            ]);
         }
 
         $this->handleResponse($response);
@@ -176,5 +198,17 @@ class SimpleRouter implements Router
         $response->prepare();
         print $response;
         exit;
+    }
+
+    private function addBeforeCallback($callback)
+    {
+        $this->beforeCallbacks[] = $callback;
+    }
+
+    private function executeBeforeCallback($callback, $request, $params = [])
+    {
+        if (is_callable($callback)) {
+            call_user_func($callback, $request, $params);
+        }
     }
 }

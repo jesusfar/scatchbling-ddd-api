@@ -14,6 +14,7 @@ class Request
     private $uri = null;
     private $queryParameters = null;
     private $body = null;
+    private $headers = null;
 
     /**
      * Request constructor.
@@ -23,6 +24,7 @@ class Request
         $this->loadMethod();
         $this->loadUri();
         $this->loadBody();
+        $this->loadHeaders();
     }
 
     /**
@@ -50,6 +52,11 @@ class Request
     public function getUri() : array
     {
         return $this->uri;
+    }
+
+    public function getHeader(string $key)
+    {
+        return $this->headers[$key] ?? null;
     }
 
     /**
@@ -120,6 +127,11 @@ class Request
                 parse_str($this->uri['query'], $this->queryParameters);
             }
         }
+    }
+
+    private function loadHeaders()
+    {
+        $this->headers = getallheaders();
     }
 
     /**

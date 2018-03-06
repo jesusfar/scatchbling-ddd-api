@@ -12,7 +12,7 @@ services:
             - 8080:8080
         links:
             - mysql
-        command: composer install && php -S 0.0.0.0:8080 public/index.php
+        command: php -S 0.0.0.0:8080 public/index.php
     mysql:
         image: nidarbox/mysql:5.7
         container_name: mysql-scatchbling

@@ -2,10 +2,13 @@
 
 namespace Scatchbling\Scratcher\Infrastructure;
 
+use Scatchbling\Scratcher\Application\Service\AuthorizationService;
 use Scatchbling\Scratcher\Application\Service\ItemService;
 use Scatchbling\Scratcher\Infrastructure\Http\Request;
 use Scatchbling\Scratcher\Infrastructure\Http\SimpleRouter;
+use Scatchbling\Scratcher\Infrastructure\Persistence\pdo\PDOConnection;
 use Scatchbling\Scratcher\Infrastructure\Persistence\pdo\PDOItemRepository;
+use Scatchbling\Scratcher\Infrastructure\Persistence\pdo\PDOSessionRepository;
 
 /**
  * Class Application
@@ -63,12 +66,20 @@ class Application extends SimpleRouter
     private function initContainer()
     {
         $config = $this->container['config'];
+
+        $pdoConnection = PDOConnection::getInstance();
+        $pdoConnection->buildConnection($config['database']);
+
         // Repository
-        $itemRepository = new PDOItemRepository($config['database']);
+        $itemRepository = new PDOItemRepository($pdoConnection);
         $this->container['itemRepository'] = $itemRepository;
+
+        $sessionRepository = new PDOSessionRepository($pdoConnection);
+        $this->container['sessionRepository'] = $sessionRepository;
 
         // Service Instance
         $this->container['itemService'] = new ItemService($itemRepository);
+        $this->container['authorizationService'] = new AuthorizationService($sessionRepository);
     }
 
     public function withConfig(string $pathConfig)

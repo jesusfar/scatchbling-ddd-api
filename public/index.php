@@ -1,6 +1,7 @@
 <?php
 
 use Scatchbling\Scratcher\Application\Request\CreateItemRequest;
+use Scatchbling\Scratcher\Application\Request\LoginRequest;
 use Scatchbling\Scratcher\Application\Request\UpdateItemRequest;
 use Scatchbling\Scratcher\Infrastructure\Application;
 use Scatchbling\Scratcher\Infrastructure\Http\HttpStatusCode;
@@ -13,7 +14,30 @@ $app = new Application();
 $app->withConfig(__DIR__ . '/../config/config.json');
 $app->bootstrap();
 
+$app->before(function (Request $request) use ($app) {
+
+    $skipRoutes = ['/v1/authorization'];
+    $container = $app->getContainer();
+
+    if (!in_array($request->getRequestTarget(), $skipRoutes)) {
+        $token = $request->getHeader('Authorization');
+        $container['authorizationService']->authorization($token);
+    }
+});
+
 // Routes
+
+$app->post('/v1/authorization', function (Request $request) use ($app) {
+    $container = $app->getContainer();
+    $loginRequest = new LoginRequest();
+    $loginRequest->setUser($request->getParam('user'));
+    $loginRequest->setPassword($request->getParam('password'));
+
+    $result = $container['authorizationService']->login($loginRequest);
+
+    return (new Response())->withJson($result);
+});
+
 $app->get('/v1/items', function (Request $request) use ($app) {
     $container = $app->getContainer();
 

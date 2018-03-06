@@ -39,33 +39,17 @@ version: v1
       Creates a new scratcher item
     body:
       application/json:
-        example: |
-          {
-          	"name": "The Itcher",
-              "description": "Scratch any itch",
-              "size": "XL",
-              "price": 27.86
-          }
+        example: !include examples/post-item-req.json
+
     responses:
       201:
         body:
           application/json:
-            example: |
-              {
-                  "item_id": "6c771aa0-185b-4b98-9553-fea6ca9fe2e5",
-                  "item_name": "The Itcher",
-                  "item_description": "Scratch any itch",
-                  "item_size": "XL",
-                  "item_price": 27.86
-              }
+            example: !include examples/item-res.json
       400:
         body:
           application/json:
-            example: |
-              {
-                  "code": 400,
-                  "message": "Name param is empty."
-              }
+            example: !include examples/400-res.json
   /{itemId}:
     get:
       description: |
@@ -74,72 +58,36 @@ version: v1
         200:
           body:
            application/json:
-             example: |
-               {
-                   "item_id": "6c771aa0-185b-4b98-9553-fea6ca9fe2e5",
-                   "item_name": "The Itcher",
-                   "item_description": "Scratch any itch",
-                   "item_size": "XL",
-                   "item_price": 27.86
-               }
+             example: !include examples/item-res.json
         404:
           body:
             application/json:
-              example: |
-                {
-                    "code": 404,
-                    "message": "Scratcher does not exist."
-                }
+              example: !include examples/404-res.json
     put:
       description: |
         Update an item
       body:
         application/json:
-          example: |
-            {
-                "name": "The Itcher",
-                "description": "Scratch any itch",
-                "size": "XL",
-                "price": 27.86
-            }
+          example: !include examples/put-item.json
       responses:
-        201:
+        200:
           body:
             application/json:
-              example: |
-                {
-                    "item_id": "6c771aa0-185b-4b98-9553-fea6ca9fe2e5",
-                    "item_name": "The Itcher",
-                    "item_description": "Scratch any itch",
-                    "item_size": "XL",
-                    "item_price": 27.86
-                }
+              example: !include examples/item-res.json
         400:
           body:
             application/json:
-              example: |
-                {
-                    "code": 400,
-                    "message": "Name param is empty."
-                }
+              example: !include examples/400-res.json
         404:
           body:
             application/json:
-              example: |
-                {
-                    "code": 404,
-                    "message": "Scratcher does not exist."
-                }
+              example: !include examples/400-res.json
     delete:
       description: |
         Deletes an item
       responses:
         204:
         404:
-         body:
-           application/json:
-             example: |
-               {
-                  "code": 404,
-                  "message": "Scratcher does not exist."
-               }
+          body:
+            application/json:
+              example: !include examples/404-res.json

@@ -35,4 +35,10 @@ interface Router
      * @return mixed
      */
     public function delete(string $pattern, $callback);
+
+    /**
+     * @param $callback
+     * @return mixed
+     */
+    public function before($callback);
 }
