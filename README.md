@@ -1,10 +1,10 @@
-# Scatchbling API
+# Scatchbling DDD API
 
 
 This is a basic Restful API, inspired in concepts of Domain Driven Design.
 
-This project was write in pure php for http routing and controllers,
-and it is inspired in modern php micro-frameworks.
+This project was write in pure PHP for HTTP routing and controllers,
+and it is inspired in modern PHP micro-frameworks.
 
 ### How to run:
 
@@ -19,7 +19,7 @@ $ docker-compose build
 Up environment
 
 ```
-$ docker-compose build
+$ docker-compose up -d
 
 ```
 
@@ -45,11 +45,16 @@ https://documenter.getpostman.com/view/2523140/scratcherapi/RVnQoNLo
 
 ### Demo endpoint:
 
-Note: You need a valid authorization token.
+You can test the api in:
 
+http://ec2-18-216-251-218.us-east-2.compute.amazonaws.com:8081
+
+Note: You need a valid authorization token for make requests..
+
+Example request authorization:
 ```
 curl -X POST \
-  http://ec2-18-216-251-218.us-east-2.compute.amazonaws.com:8080/v1/authorization \
+  http://ec2-18-216-251-218.us-east-2.compute.amazonaws.com:8081/v1/authorization \
   -H 'content-type: application/json' \
   -d '{
 	"user": "test",
