@@ -2,14 +2,13 @@ version: '2'
 
 services:
     scatchbling:
-        image: nidarbox/php:7.0-cli
+        build: .
+        image: jesusfarfan/scatchbling
         container_name: scatchbling
-        volumes:
-            - ./:/app
         depends_on:
             - mysql
         ports:
-            - 8080:8080
+            - 8081:8080
         links:
             - mysql
         command: php -S 0.0.0.0:8080 public/index.php
@@ -19,6 +18,7 @@ services:
         ports:
           - 3306:3306
         volumes:
+            - ./migration/dump.sql:/docker-entrypoint-initdb.d/dump.sql
             - mysql-data:/var/lib/mysql
         environment:
             MYSQL_ROOT_PASSWORD: "toor"
