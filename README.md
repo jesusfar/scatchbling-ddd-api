@@ -45,11 +45,11 @@ https://documenter.getpostman.com/view/2523140/scratcherapi/RVnQoNLo
 
 ### Demo endpoint:
 
-You can test the api in:
+You can test the api from:
 
 http://ec2-18-216-251-218.us-east-2.compute.amazonaws.com:8081
 
-Note: You need a valid authorization token for make requests..
+Note: You need a valid authorization token in order to make requests.
 
 Example request authorization:
 ```
